@@ -6,7 +6,9 @@ on:
   workflow_dispatch: 
 
 jobs:
-  build:
+
+
+  build-ubuntu:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,3 +21,43 @@ jobs:
 
       - name: Run example (for a quick test)
         run: ./metrics_example
+
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          brew update
+          brew install llvm
+
+      - name: Compile example with clang++
+        run: |
+          export PATH="/usr/local/opt/llvm/bin:$PATH"
+          clang++ -std=c++17 examples/main.cpp -Iinclude -o metrics_example -pthread
+
+      - name: Run example
+        run: ./metrics_example
+
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure MSVC environment
+        shell: cmd
+        run: call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
+
+      - name: Compile example with cl
+        shell: cmd
+        run: cl /EHsc /std:c++17 examples\main.cpp /Iinclude /Fe:metrics_example.exe
+
+      - name: Run example
+        shell: cmd
+        run: .\metrics_example.exe
