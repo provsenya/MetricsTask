@@ -52,7 +52,7 @@ jobs:
 
       - name: Configure MSVC environment
         shell: cmd
-        run: call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
+        run: call "%ProgramFiles%\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
 
       - name: Compile example with cl
         shell: cmd
