@@ -50,7 +50,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Configure MSVC environment
+      - name: Build and Run with MSVC
         shell: cmd
         run: |
           for /f "usebackq tokens=*" %%I in (
@@ -58,11 +58,6 @@ jobs:
           ) do set "VSINSTALL=%%I"
           
           call "%VSINSTALL%\VC\Auxiliary\Build\vcvarsall.bat" x64
-
-      - name: Compile example with cl
-        shell: cmd
-        run: cl /EHsc /std:c++17 examples\main.cpp /Iinclude /Fe:metrics_example.exe
-
-      - name: Run example
-        shell: cmd
-        run: .\metrics_example.exe
+          
+          cl /EHsc /std:c++17 examples\main.cpp /Iinclude /Fe:metrics_example.exe
+          .\metrics_example.exe
